@@ -1,0 +1,1 @@
+declare module 'node-vk-bot-api'
