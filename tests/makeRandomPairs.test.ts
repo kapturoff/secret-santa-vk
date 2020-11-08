@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import makePairs from '../src/helpers/makePairs'
+import makeRandomPairs from '../src/helpers/makeRandomPairs'
 
-describe('makePairs() function', () => {
+describe('makeRandomPairs() function', () => {
 	const users = [
 		{ name: 'Donald Duck', id: 0 },
 		{ name: 'Roberto', id: 1 },
@@ -10,7 +10,8 @@ describe('makePairs() function', () => {
 		{ name: 'Vobla', id: 4 },
 		{ name: 'John', id: 5 },
 	]
-	const pairs = makePairs(users)
+	
+	const pairs = makeRandomPairs(users)
 
 	it('must return count of pairs that equals count of users', () => {
 		expect(pairs).have.lengthOf(users.length)

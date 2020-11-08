@@ -4,7 +4,7 @@ function takeRandomMemberOfArray<T>(array: Array<T>): T {
 	return array[Math.floor(Math.random() * array.length)]
 }
 
-function makePairs(users: Array<User>): Array<Pair> {
+function makeRandomPairs(users: Array<User>): Array<Pair> {
 	let pairs: Array<Pair> = []
 	let tempArray: Array<User> = users.slice() // To not modify array given in arguments
 
@@ -26,9 +26,9 @@ function makePairs(users: Array<User>): Array<Pair> {
 
 	// If at least one of the users has got no pair, function runs again
 	if (pairs.find((pair: Pair) => !pair.santa && !pair.recipient))
-		pairs = makePairs(users)
+		pairs = makeRandomPairs(users)
 
 	return pairs
 }
 
-export default makePairs
+export default makeRandomPairs
