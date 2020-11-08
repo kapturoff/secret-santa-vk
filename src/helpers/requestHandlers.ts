@@ -115,3 +115,13 @@ function helpHandler(): MessageResponse {
         `,
 	}
 }
+
+export {
+	greeterHandler,
+	roomChooseNameHandler,
+	createdRoomHandler,
+	joinRoomHandler,
+	joinedRoomHandler,
+	failedToJoinRoomHandler,
+	helpHandler,
+}
