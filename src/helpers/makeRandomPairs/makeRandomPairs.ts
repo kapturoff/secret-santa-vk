@@ -1,10 +1,7 @@
-import { User, Pair } from '../interfaces'
+import { User, Pair } from 'interfaces'
+import takeRandomMemberOfArray from './takeRandomMemberOfArray'
 
-function takeRandomMemberOfArray<T>(array: Array<T>): T {
-	return array[Math.floor(Math.random() * array.length)]
-}
-
-function makeRandomPairs(users: Array<User>): Array<Pair> {
+export default function makeRandomPairs(users: Array<User>): Array<Pair> {
 	let pairs: Array<Pair> = []
 	let tempArray: Array<User> = users.slice() // To not modify array given in arguments
 
@@ -30,5 +27,3 @@ function makeRandomPairs(users: Array<User>): Array<Pair> {
 
 	return pairs
 }
-
-export default makeRandomPairs

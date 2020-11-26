@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import createID from "../src/helpers/IDgenerator"
+import createID from "../src/helpers/IDGenerator/IDGenerator"
 
 describe('IDGenerator helper', () => {
     it('createID() works', () => {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import makeRandomPairs from '../src/helpers/makeRandomPairs'
+import makeRandomPairs from '../src/helpers/makeRandomPairs/makeRandomPairs'
 
 describe('makeRandomPairs() function', () => {
 	const users = [
