@@ -1,6 +1,8 @@
 export type User = {
-	name: string
+	first_name: string
+	last_name: string
 	id: number
+	sex: 0 | 1 | 2
 }
 
 export type Pair = {
@@ -31,4 +33,6 @@ export type MessageResponse = {
 export type Room = {
 	code: string
 	name: string
+	participants: User[]
+	owner: User
 }
