@@ -9,6 +9,4 @@ const RoomSchema = new Schema({
 	owner: UserSchema,
 })
 
-const RoomModel = mongoose.model('Room', RoomSchema)
-
-export { RoomSchema, RoomModel }
+export { RoomSchema }

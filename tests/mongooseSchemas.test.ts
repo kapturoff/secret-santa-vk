@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import { expect } from 'chai'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { UserModel } from '../src/helpers/mongooseSchemas/User'
-import { RoomModel } from '../src/helpers/mongooseSchemas/Room'
+import { UserSchema } from '../src/helpers/mongooseSchemas/User'
+import { RoomSchema } from '../src/helpers/mongooseSchemas/Room'
 import { User, Room } from '../src/interfaces'
 
 const userData: User = {
@@ -18,51 +18,45 @@ const userData: User = {
 		owner: userData,
 	}
 
-before(async () => {
-	const mongod = new MongoMemoryServer({
-		instance: {
-			dbName: 'santa-claus',
-		},
+let connection
+
+before((done) => {
+	const mongod = new MongoMemoryServer()
+
+	mongod.getUri().then((uri) => {
+		connection = mongoose.createConnection(uri, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		})
+		
+		done()
 	})
-
-	const uri = await mongod.getUri()
-
-	mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 })
 
-describe('User Model Test', () => {
+describe('User Model Test', async () => {
 	it('creates an user', async () => {
-		const savedUser = await new UserModel(userData).save()
+		let UserModel = connection.model('User', UserSchema),
+			savedUser = await new UserModel(userData).save()
 
 		expect(savedUser).to.have.property('_id')
-
 		expect(savedUser).to.have.property('first_name')
 		expect(savedUser).to.have.property('last_name')
-
-		expect(savedUser.id)
-
+		expect(savedUser.id).to.not.be.undefined
 		expect(savedUser).to.have.property('sex').that.within(0, 2)
 	})
 })
 
-describe('Room Model Test', () => {
+describe('Room Model Test', async () => {
 	it('creates a room', async () => {
-		const savedRoom = await new RoomModel(roomData).save()
+		const RoomModel = connection.model('Room', RoomSchema),
+			savedRoom = await new RoomModel(roomData).save()
 
 		expect(savedRoom).to.have.property('_id')
-
 		expect(savedRoom).to.have.property('name')
 		expect(savedRoom).to.have.property('code')
-
 		expect(savedRoom).to.have.property('owner').that.is.not.undefined
-
 		expect(savedRoom)
 			.to.have.property('participants')
 			.that.has.lengthOf.above(0)
 	})
-})
-
-after(() => {
-	mongoose.connection.close()
-	setTimeout(() => process.exit(0), 2000)
 })
