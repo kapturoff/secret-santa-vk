@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import makeRandomPairs from '../src/helpers/makeRandomPairs/makeRandomPairs'
 
-describe('makeRandomPairs() function', () => {
+describe('makeRandomPairs() Function Test', () => {
 	const users = [
 		{ name: 'Donald Duck', id: 0 },
 		{ name: 'Roberto', id: 1 },
@@ -19,10 +19,10 @@ describe('makeRandomPairs() function', () => {
 
 	it('every pair must contain Santa and Recipient', () => {
 		for (const pair of pairs) {
-			expect(pair).to.have.property('santa').that.is.not.an('undefined')
+			expect(pair).to.have.property('santa').that.is.not.undefined
 			expect(pair)
 				.to.have.property('recipient')
-				.that.is.not.an('undefined')
+				.that.is.not.undefined
 		}
 	})
 })
