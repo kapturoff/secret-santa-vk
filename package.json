@@ -10,7 +10,8 @@
   "author": "scefee",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^5.11.3",
+    "@types/mongoose": "^5.10.2",
+    "mongoose": "^5.11.4",
     "node-vk-bot-api": "^3.3.7"
   },
   "devDependencies": {
