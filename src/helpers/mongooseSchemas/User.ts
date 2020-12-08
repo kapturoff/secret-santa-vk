@@ -18,6 +18,10 @@ const UserSchema = new Schema({
 		type: Number,
 		enum: [0, 1, 2],
 	},
+	wishlist: {
+		type: String,
+		required: false,
+	}
 })
 
 export { UserSchema }

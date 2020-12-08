@@ -1,8 +1,6 @@
 import { expect } from 'chai'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import DatabaseAdapter, {
-	IDatabaseAdapter,
-} from '../src/helpers/DatabaseAdapter/DatabaseAdapter'
+import DatabaseAdapter, { IDatabaseAdapter } from '../src/helpers/DatabaseAdapter/DatabaseAdapter'
 import { User, Room } from '../src/interfaces'
 
 const userData1: User = {
@@ -38,26 +36,20 @@ describe('DatabaseAdapter Class Test', async () => {
 	describe('createRoom() Function Test', () => {
 		it('room can be created', async () => {
 			const room = await databaseAdapter.createRoom(roomData.name, roomData.code, userData1)
-	
+
 			expect(room).to.not.be.undefined
 		})
 	})
 
 	describe('addUserToRoom() Function Test', () => {
 		it('user can access existing room', async () => {
-			const userJoinedRoom = await databaseAdapter.addUserToRoom(
-				userData2,
-				roomData.code
-			)
+			const userJoinedRoom = await databaseAdapter.addUserToRoom(userData2, roomData.code)
 
 			expect(userJoinedRoom).to.be.equal(2)
 		})
 
 		it('user can not join a room if he is already joined', async () => {
-			const userJoinedRoom = await databaseAdapter.addUserToRoom(
-				userData1,
-				roomData.code
-			)
+			const userJoinedRoom = await databaseAdapter.addUserToRoom(userData1, roomData.code)
 
 			expect(userJoinedRoom).to.be.equal(1)
 		})
@@ -69,6 +61,16 @@ describe('DatabaseAdapter Class Test', async () => {
 			)
 
 			expect(userJoinedRoom).to.be.equal(0)
+		})
+
+		it('user can add wishlist if he wants', async () => {
+			const wishlistAdded = await databaseAdapter.addWishlist(
+				userData1,
+				roomData.code,
+				'I want to take cake'
+			)
+
+			expect(wishlistAdded).to.exist
 		})
 	})
 

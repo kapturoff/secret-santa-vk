@@ -5,7 +5,6 @@ import { UserSchema } from '../mongooseSchemas/User'
 
 export interface IDatabaseAdapter {
 	createRoom(name: string, code: string, owner: User): Promise<mongoose.Document>
-
 	/**
 	 * Returns:
 	 * - 0 - if room was not found
@@ -13,7 +12,6 @@ export interface IDatabaseAdapter {
 	 * - 2 - if user joined the room
 	 */
 	addUserToRoom(user: User, code: string): Promise<0 | 1 | 2>
-
 	/**
 	 * Returns:
 	 * - 0 - if room was not found
@@ -21,6 +19,7 @@ export interface IDatabaseAdapter {
 	 * - 2 - if user leaved a room
 	 */
 	deleteUserFromRoom(user: User, code: string): Promise<0 | 1 | 2>
+	addWishlist(user: User, code: string, wishlist: string): Promise<mongoose.Document | null>
 	connection: mongoose.Connection
 }
 
@@ -78,5 +77,16 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 
 		await this.RoomModel.updateOne({ code }, { $pull: { participants: { id: userData.id } } })
 		return 2
+	}
+
+	async addWishlist(user: User, code: string, wishlist: string): Promise<mongoose.Document | null> {
+		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
+		const userFound = roomFound.participants.find((u: User) => u.id === user.id)
+		if (!userFound) return null
+
+		userFound.wishlist = wishlist
+		await roomFound.save()
+		
+		return roomFound
 	}
 }

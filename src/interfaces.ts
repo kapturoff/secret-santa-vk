@@ -3,6 +3,7 @@ export type User = {
 	last_name: string
 	id: number
 	sex: 0 | 1 | 2
+	wishlist?: string
 }
 
 export type Pair = {
