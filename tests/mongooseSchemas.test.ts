@@ -1,15 +1,16 @@
 import mongoose from 'mongoose'
 import { expect } from 'chai'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { UserSchema } from '../src/helpers/mongooseSchemas/User'
+import { ParticipantSchema } from '../src/helpers/mongooseSchemas/Participant'
 import { RoomSchema } from '../src/helpers/mongooseSchemas/Room'
-import { User, Room } from '../src/interfaces'
+import { Room, Participant } from '../src/interfaces'
 
-const userData: User = {
+const userData: Participant = {
 		first_name: 'John',
 		last_name: 'Doe',
 		id: 2384723482,
 		sex: 2,
+		wishlist: '',
 	},
 	roomData: Room = {
 		name: 'Christmas Room',
@@ -34,8 +35,8 @@ before((done) => {
 })
 
 describe('User Model Test', async () => {
-	it('creates an user', async () => {
-		let UserModel = connection.model('User', UserSchema),
+	it('creates an participant', async () => {
+		let UserModel = connection.model('User', ParticipantSchema),
 			savedUser = await new UserModel(userData).save()
 
 		expect(savedUser).to.have.property('_id')

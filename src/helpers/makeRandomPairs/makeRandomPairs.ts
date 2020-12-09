@@ -1,23 +1,23 @@
-import { User, Pair } from 'interfaces'
+import { Participant, Pair } from 'interfaces'
 import takeRandomMemberOfArray from './takeRandomMemberOfArray'
 
-export default function makeRandomPairs(users: Array<User>): Array<Pair> {
+export default function makeRandomPairs(users: Array<Participant>): Array<Pair> {
 	let pairs: Array<Pair> = []
-	let tempArray: Array<User> = users.slice() // To not modify array given in arguments
+	let tempArray: Array<Participant> = users.slice() // To not modify array given in arguments
 
-	users.map((santa: User): void => {
+	users.map((santa: Participant): void => {
 		// To aboid case where user is being pair for himself
-		const tempWithoutCurrentUser: Array<User> = tempArray.filter(
-			(tempUser: User): boolean => santa !== tempUser
+		const tempWithoutCurrentUser: Array<Participant> = tempArray.filter(
+			(tempUser: Participant): boolean => santa !== tempUser
 		)
-		const recipient: User = takeRandomMemberOfArray(tempWithoutCurrentUser)
+		const recipient: Participant = takeRandomMemberOfArray(tempWithoutCurrentUser)
 		const pair: Pair = { santa: santa, recipient: recipient }
 
 		pairs.push(pair)
 
 		// To avoid case where user gets more then one Secret Santa
 		tempArray = tempArray.filter(
-			(tempUser: User): boolean => tempUser !== recipient
+			(tempUser: Participant): boolean => tempUser !== recipient
 		)
 	})
 

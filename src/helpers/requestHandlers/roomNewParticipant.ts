@@ -1,8 +1,8 @@
-import { ClientInfo, MessageResponse, Room, User } from 'interfaces'
+import { ClientInfo, MessageResponse, Room, Participant } from 'interfaces'
 import Markup from 'vk-markup'
 
 export default function roomNewParticipant(
-	user: User,
+	user: Participant,
 	room: Room
 ): MessageResponse {
 	return {

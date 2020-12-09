@@ -1,6 +1,6 @@
-import { ClientInfo, MessageResponse, Room, User } from 'interfaces'
+import { ClientInfo, MessageResponse, Room, Participant } from 'interfaces'
 
-export default function roomNewParticipant(receiver: User, room: Room): MessageResponse {
+export default function roomNewParticipant(receiver: Participant, room: Room): MessageResponse {
 	return {
 		text: `Игра в комнате "${room.name}" (${room.code}) началась! 
 Человек, которому ты должен подарить подарок: ${receiver.first_name} ${

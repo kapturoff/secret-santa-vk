@@ -1,25 +1,25 @@
 import mongoose from 'mongoose'
-import { User, Room } from 'interfaces'
+import { Participant, Room } from 'interfaces'
 import { RoomSchema } from '../mongooseSchemas/Room'
-import { UserSchema } from '../mongooseSchemas/User'
+import { ParticipantSchema } from '../mongooseSchemas/Participant'
 
 export interface IDatabaseAdapter {
-	createRoom(name: string, code: string, owner: User): Promise<mongoose.Document>
+	createRoom(name: string, code: string, owner: Participant): Promise<mongoose.Document>
 	/**
 	 * Returns:
 	 * - 0 - if room was not found
 	 * - 1 - if user was already in the room
 	 * - 2 - if user joined the room
 	 */
-	addUserToRoom(user: User, code: string): Promise<0 | 1 | 2>
+	addUserToRoom(user: Participant, code: string): Promise<0 | 1 | 2>
 	/**
 	 * Returns:
 	 * - 0 - if room was not found
 	 * - 1 - if user is not in the room
 	 * - 2 - if user leaved a room
 	 */
-	deleteUserFromRoom(user: User, code: string): Promise<0 | 1 | 2>
-	addWishlist(user: User, code: string, wishlist: string): Promise<mongoose.Document | null>
+	deleteUserFromRoom(user: Participant, code: string): Promise<0 | 1 | 2>
+	addWishlist(user: Participant, code: string, wishlist: string): Promise<mongoose.Document | null>
 	connection: mongoose.Connection
 }
 
@@ -35,10 +35,10 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		})
 
 		this.RoomModel = this.connection.model('Room', RoomSchema, 'rooms')
-		this.UserModel = this.connection.model('User', UserSchema)
+		this.UserModel = this.connection.model('User', ParticipantSchema)
 	}
 
-	async createRoom(name: string, code: string, owner: User): Promise<mongoose.Document> {
+	async createRoom(name: string, code: string, owner: Participant): Promise<mongoose.Document> {
 		const RoomModel = this.connection.model('Room', RoomSchema, 'rooms')
 
 		const response = await new RoomModel({
@@ -51,7 +51,7 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		return response
 	}
 
-	async addUserToRoom(userData: User, code: string): Promise<0 | 1 | 2> {
+	async addUserToRoom(userData: Participant, code: string): Promise<0 | 1 | 2> {
 		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
 		if (!roomFound) return 0
 
@@ -66,7 +66,7 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		return 2
 	}
 
-	async deleteUserFromRoom(userData: User, code: string): Promise<0 | 1 | 2> {
+	async deleteUserFromRoom(userData: Participant, code: string): Promise<0 | 1 | 2> {
 		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
 		if (!roomFound) return 0
 
@@ -79,9 +79,9 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		return 2
 	}
 
-	async addWishlist(user: User, code: string, wishlist: string): Promise<mongoose.Document | null> {
+	async addWishlist(user: Participant, code: string, wishlist: string): Promise<mongoose.Document | null> {
 		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
-		const userFound = roomFound.participants.find((u: User) => u.id === user.id)
+		const userFound = roomFound.participants.find((u: Participant) => u.id === user.id)
 		if (!userFound) return null
 
 		userFound.wishlist = wishlist

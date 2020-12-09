@@ -1,14 +1,14 @@
-export type User = {
+export type Participant = {
 	first_name: string
 	last_name: string
 	id: number
 	sex: 0 | 1 | 2
-	wishlist?: string
+	wishlist: string
 }
 
 export type Pair = {
-	santa: User
-	recipient: User
+	santa: Participant
+	recipient: Participant
 }
 
 export type ClientInfo = {
@@ -34,6 +34,6 @@ export type MessageResponse = {
 export type Room = {
 	code: string
 	name: string
-	participants: User[]
-	owner: User
+	participants: Participant[]
+	owner: Participant
 }

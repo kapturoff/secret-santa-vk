@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
-const UserSchema = new Schema({
+const ParticipantSchema = new Schema({
 	first_name: {
 		type: String,
 		required: true,
@@ -24,4 +24,4 @@ const UserSchema = new Schema({
 	}
 })
 
-export { UserSchema }
+export { ParticipantSchema }
