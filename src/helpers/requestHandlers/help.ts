@@ -1,7 +1,7 @@
 import { ClientInfo, MessageResponse, Room } from 'interfaces'
 import Markup from 'vk-markup'
 
-export function helpHandler(): MessageResponse {
+export default function helpHandler(): MessageResponse {
 	return {
 		text: `Тайный Санта — игра, позволяющая весело провести любой праздник, связанный с подарками.
 
