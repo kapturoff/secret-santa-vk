@@ -22,7 +22,7 @@ export default function makeRandomPairs(users: Array<Participant>): Array<Pair> 
 	})
 
 	// If at least one of the users has got no pair, function runs again
-	if (pairs.find((pair: Pair) => !pair.santa && !pair.recipient))
+	if (pairs.find((pair: Pair) => !pair.santa || !pair.recipient))
 		pairs = makeRandomPairs(users)
 
 	return pairs

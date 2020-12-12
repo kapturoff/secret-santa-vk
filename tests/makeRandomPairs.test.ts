@@ -19,8 +19,8 @@ describe('makeRandomPairs() Function Test', () => {
 
 	it('every pair must contain Santa and Recipient', () => {
 		for (const pair of pairs) {
-			expect(pair).to.have.property('santa').that.is.not.undefined
-			expect(pair)
+			expect(pair, `Do not have Santa: ${JSON.stringify(pair)}`).to.have.property('santa').that.is.not.undefined
+			expect(pair, `Do not have recipient: ${JSON.stringify(pair)}`)
 				.to.have.property('recipient')
 				.that.is.not.undefined
 		}
