@@ -1,9 +1,29 @@
+/**
+ * Participant model is abstractrion above a
+ * participant of the room. It does not contain
+ * any data about which rooms user joined, but contains
+ * special field "wishlist", that are unique for 
+ * every room too.
+ */
 export type Participant = {
 	first_name: string
 	last_name: string
 	id: number
 	sex: 0 | 1 | 2
 	wishlist: string
+}
+
+/**
+ * User model is abstraction above a real user.
+ * It should only contain information about which
+ * room an user joined into.
+ */
+export type User = {
+	first_name: string
+	last_name: string
+	id: number
+	sex: 0 | 1 | 2
+	rooms: Room[]
 }
 
 export type Pair = {
@@ -35,5 +55,5 @@ export type Room = {
 	code: string
 	name: string
 	participants: Participant[]
-	owner: Participant
+	owner: User
 }
