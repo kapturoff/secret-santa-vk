@@ -21,8 +21,9 @@ export default function roomCreatedHandler(
 			Markup.button({
 				color: 'default',
 				action: {
+					type: 'text',
 					label: 'Начать!',
-					payload: { action: 'startRoom' },
+					payload: JSON.stringify({ command: 'startRoom' })
 				},
 			}),
 		]).inline(),

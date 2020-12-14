@@ -8,8 +8,9 @@ export default function roomNotJoinedHandler(code: string): MessageResponse {
 			Markup.button({
 				color: 'secondary',
 				action: {
+					type: 'text',
 					label: 'Вернуться назад',
-					payload: { action: 'start' },
+					payload: JSON.stringify({ command: 'start' })
 				},
 			}),
 		],

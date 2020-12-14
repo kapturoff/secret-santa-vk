@@ -11,8 +11,9 @@ export default function roomJoinedHandler(room: Room): MessageResponse {
 			Markup.button({
 				color: 'secondary',
 				action: {
+					type: 'text',
 					label: 'Пропустить',
-					payload: { action: 'start' },
+					payload: JSON.stringify({ command: 'start' })
 				},
 			}),
 		]),

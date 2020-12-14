@@ -44,9 +44,9 @@ export type MessageResponse = {
 	buttons?: {
 		color: 'positive' | 'negative' | 'secondary' | 'primary'
 		action: {
+			type: 'text'
 			label: string
-			payload: object
-			type?: 'text'
+			payload: string
 		}
 	}[]
 }

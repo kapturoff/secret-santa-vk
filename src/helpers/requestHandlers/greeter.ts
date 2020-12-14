@@ -18,29 +18,33 @@ ${
 			Markup.button({
 				color: 'positive',
 				action: {
+					type: 'text',
 					label: 'Создать комнату',
-					payload: { action: 'createRoom' },
+					payload: JSON.stringify({ command: 'createRoom' },)
 				},
 			}),
 			Markup.button({
 				color: 'secondary',
 				action: {
+					type: 'text',
 					label: 'Присоединиться к комнате',
-					payload: { action: 'joinRoom' },
+					payload: JSON.stringify({ command: 'joinRoom' },)
 				},
 			}),
 			Markup.button({
 				color: 'secondary',
 				action: {
+					type: 'text',
 					label: 'Выйти из комнаты',
-					payload: { action: 'leaveRoom' },
+					payload: JSON.stringify({ command: 'leaveRoom' },)
 				},
 			}),
 			Markup.button({
 				color: 'negative',
 				action: {
+					type: 'text',
 					label: 'Что такое "Тайный Санта"?',
-					payload: { action: 'help' },
+					payload: JSON.stringify({ command: 'help' },)
 				},
 			}),
 		]),
