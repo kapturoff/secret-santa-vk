@@ -29,7 +29,7 @@ interface RequestHandlers {
 }
 
 class RequestHandlers {}
-RequestHandlers.prototype = {
+Object.assign(RequestHandlers.prototype, {
 	greeter,
 	help,
 	roomChooseName,
@@ -43,6 +43,6 @@ RequestHandlers.prototype = {
 	roomNotJoined,
 	userLeavedRoom,
 	userLeavingRoom,
-}
+})
 
 export default RequestHandlers

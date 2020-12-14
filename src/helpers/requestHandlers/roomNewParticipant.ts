@@ -1,5 +1,5 @@
 import { ClientInfo, MessageResponse, Room, Participant } from 'interfaces'
-import Markup from 'vk-markup'
+import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomNewParticipant(
 	user: Participant,
