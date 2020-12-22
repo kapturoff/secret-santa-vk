@@ -1,4 +1,5 @@
 import { ClientInfo, MessageResponse, Room, Participant } from 'interfaces'
+import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomNewParticipant(receiver: Participant, room: Room): MessageResponse {
 	return {
@@ -16,5 +17,15 @@ ${
 
 Желаю вам всем хорошо провести время!
 `,
+		buttons: Markup.keyboard([
+			Markup.button({
+				color: 'secondary',
+				action: {
+					type: 'text',
+					label: 'Вернуться назад',
+					payload: JSON.stringify({ command: 'start' })
+				},
+			}),
+		]),
 	}
 }

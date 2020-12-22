@@ -9,6 +9,16 @@ export default function helpHandler(): MessageResponse {
 
 Разница от простого обмена подарками лишь в том, что в Тайном Санте ты не будешь знать не только то, что тебе подарят, но и то, кто тебе будет что-либо дарить.        
 И это безумно интересно ^-^
-        `,
+		`,
+		buttons: Markup.keyboard([
+			Markup.button({
+				color: 'secondary',
+				action: {
+					type: 'text',
+					label: 'Вернуться назад',
+					payload: JSON.stringify({ command: 'start' })
+				},
+			}),
+		]),
 	}
 }

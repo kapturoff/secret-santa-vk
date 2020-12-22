@@ -4,7 +4,7 @@ import Markup from 'node-vk-bot-api/lib/markup'
 export default function roomNotJoinedHandler(code: string): MessageResponse {
 	return {
 		text: `Прости, но я не смог найти комнату c кодом ${code}. Возможно, ты ошибся с кодом?`,
-		buttons: [
+		buttons: Markup.keyboard([
 			Markup.button({
 				color: 'secondary',
 				action: {
@@ -13,6 +13,6 @@ export default function roomNotJoinedHandler(code: string): MessageResponse {
 					payload: JSON.stringify({ command: 'start' })
 				},
 			}),
-		],
+		]),
 	}
 }

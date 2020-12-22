@@ -41,7 +41,7 @@ export type ClientInfo = {
 
 export type MessageResponse = {
 	text: string
-	buttons?: {
+	buttons: {
 		color: 'positive' | 'negative' | 'secondary' | 'primary'
 		action: {
 			type: 'text'
