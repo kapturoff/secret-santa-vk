@@ -2,7 +2,7 @@
  * Participant model is abstractrion above a
  * participant of the room. It does not contain
  * any data about which rooms user joined, but contains
- * special field "wishlist", that are unique for 
+ * special field "wishlist", that are unique for
  * every room too.
  */
 export type Participant = {
@@ -39,16 +39,18 @@ export type ClientInfo = {
 	lang_id: number
 }
 
+export type Button = {
+	color: 'positive' | 'negative' | 'secondary' | 'primary'
+	action: {
+		type: 'text'
+		label: string
+		payload: string
+	}
+}
+
 export type MessageResponse = {
 	text: string
-	buttons: {
-		color: 'positive' | 'negative' | 'secondary' | 'primary'
-		action: {
-			type: 'text'
-			label: string
-			payload: string
-		}
-	}[]
+	buttons: Button[] | [Button][]
 }
 
 export type Room = {

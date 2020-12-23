@@ -44,6 +44,14 @@ ${
 						payload: JSON.stringify({ command: 'leaveRoom' }),
 					},
 				}),
+				Markup.button({
+					color: 'secondary',
+					action: {
+						type: 'text',
+						label: 'Удалить комнату',
+						payload: JSON.stringify({ command: 'deleteRoom' }),
+					},
+				}),
 			],
 			[
 				Markup.button({
