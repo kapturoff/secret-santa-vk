@@ -53,7 +53,7 @@ export default new Scene(
 			}
         } else {
             const { text, buttons } = requestHandlers.roomNotFound(code)
-            ctx.reply(text, null, buttons)
+			ctx.reply(text, null, buttons)
         }
 
 		ctx.scene.leave()

@@ -23,18 +23,15 @@ export default new Scene(
 		}
 
 		const code: string = ctx.message.text
+		const roomFound = await databaseAdapter.getRoom(code)
 		ctx.session.roomCode = code
 
 		const roomDeleted = await databaseAdapter.deleteRoom(ctx.session.userData, code)
 
+		ctx.scene.leave()
 		if (roomDeleted === 2) {
-			const roomFound = await databaseAdapter.getRoom(code)
-			if (roomFound) {
-				const { text, buttons } = requestHandlers.userDeletedRoom(
-					roomFound as Room & Document
-				)
-				ctx.reply(text, null, buttons)
-			}
+			const { text, buttons } = requestHandlers.userDeletedRoom(roomFound as Room & Document)
+			ctx.reply(text, null, buttons)
 		} else if (roomDeleted === 1) {
 			const { text, buttons } = requestHandlers.userIsNotAnOwner()
 			ctx.reply(text, null, buttons)
@@ -42,7 +39,5 @@ export default new Scene(
 			const { text, buttons } = requestHandlers.roomNotFound(code)
 			ctx.reply(text, null, buttons)
 		}
-
-		ctx.scene.leave()
 	}
 )
