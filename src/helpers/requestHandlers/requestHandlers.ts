@@ -11,6 +11,10 @@ import roomNotEnoughParticipants from './roomNotEnoughParticipants'
 import roomNotFound from './roomNotFound'
 import userLeavedRoom from './userLeavedRoom'
 import userLeavingRoom from './userLeavingRoom'
+import userDeletingRoom from './userDeletingRoom'
+import userDeletedRoom from './userDeletedRoom'
+import roomUserIsOwner from './roomUserIsOwner'
+import userIsNotAnOwner from './userIsNotAnOwner'
 import wishlistAdded from './wishlistAdded'
 
 interface RequestHandlers {
@@ -28,6 +32,10 @@ interface RequestHandlers {
 	userLeavedRoom: typeof userLeavedRoom
 	userLeavingRoom: typeof userLeavingRoom
 	wishlistAdded: typeof wishlistAdded
+	userDeletingRoom: typeof userDeletingRoom
+	userDeletedRoom: typeof userDeletedRoom
+	roomUserIsOwner: typeof roomUserIsOwner
+	userIsNotAnOwner: typeof userIsNotAnOwner
 }
 
 class RequestHandlers {}
@@ -46,6 +54,10 @@ Object.assign(RequestHandlers.prototype, {
 	userLeavedRoom,
 	userLeavingRoom,
 	wishlistAdded,
+	userDeletingRoom,
+	userDeletedRoom,
+	roomUserIsOwner,
+	userIsNotAnOwner,
 })
 
 export default RequestHandlers
