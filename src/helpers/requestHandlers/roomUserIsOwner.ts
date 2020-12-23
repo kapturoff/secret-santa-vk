@@ -5,7 +5,7 @@ export default function roomUserIsOwner(room: Room): MessageResponse {
 	return {
 		text: `Прости, но мы не можем убрать тебя из комнаты "${room.name}" (${room.code}), потому что ты её и создал.
 Может быть ты захочешь удалить комнату?`,
-		buttons: [
+		buttons: Markup.keyboard([
 			[
 				Markup.button({
 					color: 'negative',
@@ -26,6 +26,6 @@ export default function roomUserIsOwner(room: Room): MessageResponse {
 					},
 				}),
 			],
-		],
+		]),
 	}
 }
