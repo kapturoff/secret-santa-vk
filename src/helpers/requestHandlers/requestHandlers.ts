@@ -16,10 +16,12 @@ import userDeletingRoom from './userDeletingRoom'
 import userDeletedRoom from './userDeletedRoom'
 import roomUserIsOwner from './roomUserIsOwner'
 import userIsNotAnOwner from './userIsNotAnOwner'
+import error from "./error";
 import wishlistAdded from './wishlistAdded'
 
 interface RequestHandlers {
 	greeter: typeof greeter
+	error: typeof error
 	help: typeof help
 	roomChooseName: typeof roomChooseName
 	roomCreated: typeof roomCreated
@@ -44,6 +46,7 @@ class RequestHandlers {}
 Object.assign(RequestHandlers.prototype, {
 	greeter,
 	help,
+	error,
 	roomChooseName,
 	roomCreated,
 	roomGameStarted,
