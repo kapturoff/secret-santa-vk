@@ -8,35 +8,87 @@ import DatabaseAdapter from '../helpers/DatabaseAdapter/DatabaseAdapter'
 import GetUserVK from '../helpers/getUserVK/getUserVK'
 import CreateRoomScene from '../helpers/scenes/createRoomScene'
 import LeaveRoomScene from '../helpers/scenes/leaveRoomScene'
+import JoinRoomScene from '../helpers/scenes/joinRoomScene'
+import DeleteRoomScene from '../helpers/scenes/deleteRoomScene'
 
 const bot = new VKBot(process.env.TOKEN as string),
 	databaseAdapter = new DatabaseAdapter(process.env.DATABASE_URL as string),
 	requestHandlers = new RequestHelpers(),
 	getUserVK = GetUserVK(bot),
 	session = new Session(),
-	scenes = new Stage(CreateRoomScene, LeaveRoomScene)
+	scenes = new Stage(CreateRoomScene, LeaveRoomScene, JoinRoomScene, DeleteRoomScene)
 
 bot.use(session.middleware())
 bot.use(scenes.middleware())
 
 bot.on(async (ctx: any) => {
-	const { payload, text } = ctx.message
-	const userVkData = ((await getUserVK(ctx.message.from_id)) as unknown) as User[]
-	const user = (await databaseAdapter.saveUser(userVkData[0] as User)) as User & Document
+	try {
+		const { payload, text } = ctx.message,
+			userVkData = ((await getUserVK(ctx.message.from_id)) as unknown) as User[],
+			user = (await databaseAdapter.saveUser(userVkData[0] as User)) as User & Document,
+			routeRaw = /\{"command":"(.*)"\}/.exec(payload),
+			route = routeRaw ? routeRaw[1] : 'error'
 
-	if (text === '/start' || payload === '{"command":"start"}') {
-		const { text, buttons } = requestHandlers.greeter(user.rooms)
+		if (text === '/start' || text === 'Начать' || route === 'start') {
+			const { text, buttons } = requestHandlers.greeter(user.rooms)
+			ctx.reply(text, null, buttons)
+		} else if (route === 'createRoom') {
+			ctx.session.userData = user
+			ctx.scene.enter('createRoom')
+		} else if (route === 'leaveRoom') {
+			ctx.session.userData = user
+			ctx.scene.enter('leaveRoom')
+		} else if (route === 'joinRoom') {
+			ctx.session.userData = user
+			ctx.scene.enter('joinRoom')
+		} else if (route === 'deleteRoom') {
+			ctx.session.userData = user
+			ctx.scene.enter('deleteRoom')
+		} else if (route === 'help') {
+			const { text, buttons } = requestHandlers.help()
+			ctx.reply(text, null, buttons)
+		} else if (text.startsWith('/startRoom') || route.startsWith('startRoom')) {
+			const codeRaw = /:(.+)/.exec(route === 'error' ? text : route)
+
+			if (codeRaw) {
+				const code = codeRaw[1],
+					gameStarted = await databaseAdapter.startGame(user, code)
+
+				if (gameStarted.status === 0) {
+					const { text, buttons } = requestHandlers.roomNotFound(code)
+					ctx.reply(text, null, buttons)
+				} else if (gameStarted.status === 1) {
+					const { text, buttons } = requestHandlers.userIsNotAnOwner()
+					ctx.reply(text, null, buttons)
+				} else if (gameStarted.status === 2) {
+					const { text, buttons } = requestHandlers.roomNotEnoughParticipants(
+						((await databaseAdapter.getRoom(code)) as unknown) as Room
+					)
+					ctx.reply(text, null, buttons)
+				} else if (gameStarted.status === 3) {
+					gameStarted.pairs.map(async (pair) => {
+						const { text, buttons } = requestHandlers.roomGameStarted(
+							pair.recipient,
+							((await databaseAdapter.getRoom(code)) as unknown) as Room
+						)
+						bot.sendMessage(pair.santa.id, text, null, buttons)
+					})
+				} else {
+					const { text, buttons } = requestHandlers.error()
+					ctx.reply(text, null, buttons)
+				}
+			} else {
+				const { text, buttons } = requestHandlers.unknownCommand()
+				ctx.reply(text, null, buttons)
+			}
+		} else {
+			const { text, buttons } = requestHandlers.unknownCommand()
+			ctx.reply(text, null, buttons)
+		}
+	} catch (e) {
+		console.error(e)
+		const { text, buttons } = requestHandlers.error()
 		ctx.reply(text, null, buttons)
-	}
-
-	if (payload === '{"command":"createRoom"}') {
-		ctx.session.userData = user
-		ctx.scene.enter('createRoom')
-	}
-
-	if (payload === '{"command":"leaveRoom"}') {
-		ctx.session.userData = user
-		ctx.scene.enter('leaveRoom')
 	}
 })
 
