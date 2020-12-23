@@ -5,6 +5,7 @@ import roomCreated from './roomCreated'
 import roomGameStarted from './roomGameStarted'
 import roomJoin from './roomJoin'
 import roomJoined from './roomJoined'
+import roomJoinFailure from './roomJoinFailure'
 import roomLeaveFailure from './roomLeaveFailure'
 import roomNewParticipant from './roomNewParticipant'
 import roomNotEnoughParticipants from './roomNotEnoughParticipants'
@@ -25,6 +26,7 @@ interface RequestHandlers {
 	roomGameStarted: typeof roomGameStarted
 	roomJoin: typeof roomJoin
 	roomJoined: typeof roomJoined
+	roomJoinFailure: typeof roomJoinFailure
 	roomLeaveFailure: typeof roomLeaveFailure
 	roomNewParticipant: typeof roomNewParticipant
 	roomNotEnoughParticipants: typeof roomNotEnoughParticipants
@@ -47,6 +49,7 @@ Object.assign(RequestHandlers.prototype, {
 	roomGameStarted,
 	roomJoin,
 	roomJoined,
+	roomJoinFailure,
 	roomLeaveFailure,
 	roomNewParticipant,
 	roomNotEnoughParticipants,
