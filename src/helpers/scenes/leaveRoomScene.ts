@@ -27,7 +27,7 @@ export default new Scene(
 
 		const roomLeaved = await databaseAdapter.deleteUserFromRoom(ctx.session.userData, code)
 
-		if (roomLeaved === 2) {
+		if (roomLeaved === 3) {
 			const roomFound = await databaseAdapter.getRoom(code)
 			if (roomFound) {
 				const { text, buttons } = requestHandlers.userLeavedRoom(
@@ -35,7 +35,15 @@ export default new Scene(
 				)
 				ctx.reply(text, null, buttons)
 			}
-		} else if (roomLeaved === 1) {
+		} else if (roomLeaved === 2) {
+            const roomFound = await databaseAdapter.getRoom(code)
+			if (roomFound) {
+				const { text, buttons } = requestHandlers.roomUserIsOwner(
+					roomFound as Room & Document
+				)
+				ctx.reply(text, null, buttons)
+			}
+        } else if (roomLeaved === 1) {
             const roomFound = await databaseAdapter.getRoom(code)
 			if (roomFound) {
 				const { text, buttons } = requestHandlers.roomLeaveFailure(
