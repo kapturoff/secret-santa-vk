@@ -3,7 +3,7 @@ import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomJoinedHandler(room: Room): MessageResponse {
 	return {
-        text: `Хорошо, я удалил комнату "${room.name}" (#${room.code})`,
+        text: `Хорошо, я удалил комнату "${room.name}" (${room.code})`,
         buttons: Markup.keyboard([
 			Markup.button({
 				color: 'secondary',

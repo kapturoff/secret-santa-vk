@@ -3,8 +3,9 @@ import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomJoinedHandler(): MessageResponse {
 	return {
-		text: `Прости, но я тебя не понял. Попробуй нажать на одну из кнопок на клавиатуре.`,
-		buttons: [
+		text: `Прости, но я не понял что ты написал 🤔 
+Попробуй нажать на одну из кнопок на клавиатуре.`,
+		buttons: Markup.keyboard([
 			Markup.button({
 				color: 'secondary',
 				action: {
@@ -13,6 +14,6 @@ export default function roomJoinedHandler(): MessageResponse {
 					payload: JSON.stringify({ command: 'start' }),
 				},
 			}),
-		],
+		]),
 	}
 }
