@@ -1,10 +1,10 @@
 import { ClientInfo, MessageResponse, Room } from 'interfaces'
 import Markup from 'node-vk-bot-api/lib/markup'
 
-export default function roomJoinedHandler(room: Room): MessageResponse {
+export default function roomJoinedHandler(): MessageResponse {
 	return {
-		text: `Прости, но ты и так не состоишь в комнате "${room.name}" (${room.code})`,
-		buttons: Markup.keyboard([
+		text: `Прости, но я тебя не понял. Попробуй нажать на одну из кнопок на клавиатуре.`,
+		buttons: [
 			Markup.button({
 				color: 'secondary',
 				action: {
@@ -13,6 +13,6 @@ export default function roomJoinedHandler(room: Room): MessageResponse {
 					payload: JSON.stringify({ command: 'start' }),
 				},
 			}),
-		]),
+		],
 	}
 }

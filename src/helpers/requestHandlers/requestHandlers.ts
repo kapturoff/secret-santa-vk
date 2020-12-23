@@ -17,12 +17,14 @@ import userDeletedRoom from './userDeletedRoom'
 import roomUserIsOwner from './roomUserIsOwner'
 import userIsNotAnOwner from './userIsNotAnOwner'
 import error from "./error";
+import unknownCommand from "./unknownCommand";
 import wishlistAdded from './wishlistAdded'
 
 interface RequestHandlers {
 	greeter: typeof greeter
 	error: typeof error
 	help: typeof help
+	unknownCommand: typeof unknownCommand
 	roomChooseName: typeof roomChooseName
 	roomCreated: typeof roomCreated
 	roomGameStarted: typeof roomGameStarted
@@ -40,6 +42,7 @@ interface RequestHandlers {
 	userDeletedRoom: typeof userDeletedRoom
 	roomUserIsOwner: typeof roomUserIsOwner
 	userIsNotAnOwner: typeof userIsNotAnOwner
+	
 }
 
 class RequestHandlers {}
@@ -47,6 +50,7 @@ Object.assign(RequestHandlers.prototype, {
 	greeter,
 	help,
 	error,
+	unknownCommand,
 	roomChooseName,
 	roomCreated,
 	roomGameStarted,

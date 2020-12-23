@@ -4,7 +4,7 @@ import Markup from 'node-vk-bot-api/lib/markup'
 export default function roomJoinedHandler(room: Room): MessageResponse {
 	return {
 		text: `Ты и так уже состоишь в комнате "${room.name}" (${room.code}). Может быть, ты хотел её покинуть?`,
-		buttons: [
+		buttons: Markup.keyboard([
 			[
 				Markup.button({
 					color: 'negative',
@@ -25,6 +25,6 @@ export default function roomJoinedHandler(room: Room): MessageResponse {
 					},
 				}),
 			],
-		],
+		]),
 	}
 }

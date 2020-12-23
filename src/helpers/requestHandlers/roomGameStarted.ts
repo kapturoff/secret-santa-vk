@@ -9,8 +9,8 @@ export default function roomNewParticipant(receiver: Participant, room: Room): M
 		} (vk.com/id${receiver.id}).
 ${
 	receiver.wishlist
-		? `\nВот что он${receiver.sex === 1 ? 'а' : 'о'} написал${
-				receiver.sex === 1 ? 'а' : 'о'
+		? `\nВот что он${receiver.sex === 1 ? 'а' : ''} написал${
+				receiver.sex === 1 ? 'а' : ''
 		  } в своём списке желаний: \n${receiver.wishlist}`
 		: ''
 }
