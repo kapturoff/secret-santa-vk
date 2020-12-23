@@ -13,40 +13,48 @@ ${
 		: 'Вы ещё не присоединились ни к одной комнате и это пора исправить!'
 }
 
-Чтобы создать, покинуть или подключиться к комнате для игры, нажми на одну из кнопок ниже.`,
+Чтобы создать, покинуть или подключиться к комнате для игры, нажми на одну из кнопок ниже`,
 		buttons: Markup.keyboard([
-			Markup.button({
-				color: 'positive',
-				action: {
-					type: 'text',
-					label: 'Создать комнату',
-					payload: JSON.stringify({ command: 'createRoom' },)
-				},
-			}),
-			Markup.button({
-				color: 'secondary',
-				action: {
-					type: 'text',
-					label: 'Присоединиться к комнате',
-					payload: JSON.stringify({ command: 'joinRoom' },)
-				},
-			}),
-			Markup.button({
-				color: 'secondary',
-				action: {
-					type: 'text',
-					label: 'Выйти из комнаты',
-					payload: JSON.stringify({ command: 'leaveRoom' },)
-				},
-			}),
-			Markup.button({
-				color: 'negative',
-				action: {
-					type: 'text',
-					label: 'Что такое "Тайный Санта"?',
-					payload: JSON.stringify({ command: 'help' },)
-				},
-			}),
+			[
+				Markup.button({
+					color: 'positive',
+					action: {
+						type: 'text',
+						label: 'Создать комнату',
+						payload: JSON.stringify({ command: 'createRoom' }),
+					},
+				}),
+			],
+			[
+				Markup.button({
+					color: 'secondary',
+					action: {
+						type: 'text',
+						label: 'Присоединиться к комнате',
+						payload: JSON.stringify({ command: 'joinRoom' }),
+					},
+				}),
+			],
+			[
+				Markup.button({
+					color: 'secondary',
+					action: {
+						type: 'text',
+						label: 'Выйти из комнаты',
+						payload: JSON.stringify({ command: 'leaveRoom' }),
+					},
+				}),
+			],
+			[
+				Markup.button({
+					color: 'negative',
+					action: {
+						type: 'text',
+						label: 'Что такое "Тайный Санта"?',
+						payload: JSON.stringify({ command: 'help' }),
+					},
+				}),
+			],
 		]),
 	} as MessageResponse
 }

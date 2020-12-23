@@ -61,6 +61,7 @@ describe('DatabaseAdapter Class Test', async () => {
 		})
 
 		it('user can not join a room if he is already joined', async () => {
+			// User1 is already in the room, because he joined it by creating a room
 			const userJoinedRoom = await databaseAdapter.addUserToRoom(userData1, '02x1234j')
 
 			expect(userJoinedRoom).to.be.equal(1)
@@ -104,29 +105,57 @@ describe('DatabaseAdapter Class Test', async () => {
 		})
 
 		it('user can leave the room', async () => {
+			const userLeavedRoom = await databaseAdapter.deleteUserFromRoom(userData2, '02x1234j')
+
+			expect(userLeavedRoom).to.be.equal(3)
+		})
+		
+		it('user can not leave the room if he is not in it', async () => {
+			const userLeavedRoom = await databaseAdapter.deleteUserFromRoom(userData2, '02x1234j')
+
+			expect(userLeavedRoom).to.be.equal(1)
+		})
+
+		it('user can not leave the room if he is an owner', async () => {
 			const userLeavedRoom = await databaseAdapter.deleteUserFromRoom(userData1, '02x1234j')
 
 			expect(userLeavedRoom).to.be.equal(2)
 		})
+	})
 
-		it('user can not leave the room if he is not in it', async () => {
-			const userLeavedRoom = await databaseAdapter.deleteUserFromRoom(userData1, '02x1234j')
+	describe('isUserOwnerOfRoom() Function Test', () => {
+		it('should be an owner', async () => {
+			expect(await databaseAdapter.isUserOwnerOfRoom(userData1, '02x1234j')).to.be.true
+		})
 
-			expect(userLeavedRoom).to.be.equal(1)
+		it('should not be an owner', async () => {
+			expect(await databaseAdapter.isUserOwnerOfRoom(userData2, '02x1234j')).to.be.false
 		})
 	})
 
 	describe('deleteRoom() Function Test', () => {
+		it('user can not delete room that does not exist', async () => {
+			const roomDeleted = await databaseAdapter.deleteRoom(userData1, 'code that does not exist')
+			expect(roomDeleted).to.be.equal(0)
+		})
+
+		it('user can not delete room if he is not its owner', async () => {
+			const roomDeleted = await databaseAdapter.deleteRoom(userData2, '02x1234j')
+			expect(roomDeleted).to.be.equal(1)
+		})
+
 		it('room must be deleted from "rooms" collection', async () => {
-			const roomDeleted = await databaseAdapter.deleteRoom('02x1234j')
+			const roomDeleted = await databaseAdapter.deleteRoom(userData1, '02x1234j')
 			const roomFound = await databaseAdapter.getRoom('02x1234j')
+
+			expect(roomDeleted).to.be.equal(2)
 			expect(roomFound).to.be.null
 		})
 
 		it('room must not to be in "rooms" field of users', async () => {
 			const user = (await databaseAdapter.getUser(userData1.id)) as unknown
 
-			expect((user as User).rooms, JSON.stringify((user as User).rooms)).to.not.satisfy((array: []) =>
+			expect((user as User).rooms).to.not.satisfy((array: Room[]) =>
 				array.some((room: Room) => room.code === '02x1234j')
 			)
 		})

@@ -18,15 +18,23 @@ export interface IDatabaseAdapter {
 	 * Returns:
 	 * - 0 - if room was not found
 	 * - 1 - if user is not in the room
-	 * - 2 - if user leaved a room
+	 * - 2 - if user is owner and can not leave room
+	 * - 3 - if user leaved a room
 	 */
-	deleteUserFromRoom(user: User, code: string): Promise<0 | 1 | 2>
+	deleteUserFromRoom(user: User, code: string): Promise<0 | 1 | 2 | 3>
 	addWishlist(user: User, code: string, wishlist: string): Promise<mongoose.Document | null>
 	saveUser(user: User): Promise<mongoose.Document>
 	saveRoomInUserProfile(user: User, code: string): Promise<mongoose.Document | null>
-	deleteRoom(code: string): Promise<null>
+	/**
+	 * Returns:
+	 * - 0 - if room was not found
+	 * - 1 - if user is not owner of room
+	 * - 2 - if room was deleted
+	 */
+	deleteRoom(user: User, code: string): Promise<0 | 1 | 2>
 	getRoom(code: string): Promise<mongoose.Document | null>
 	getUser(id: number): Promise<mongoose.Document | null>
+	isUserOwnerOfRoom(user: User, code: string): Promise<Boolean>
 	connection: mongoose.Connection
 }
 
@@ -98,7 +106,7 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		return 2
 	}
 
-	async deleteUserFromRoom(userData: User, code: string): Promise<0 | 1 | 2> {
+	async deleteUserFromRoom(userData: User, code: string): Promise<0 | 1 | 2 | 3> {
 		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
 		if (!roomFound) return 0
 
@@ -107,9 +115,16 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		)
 		if (!userAlreadyInRoom) return 1
 
+		if (await this.isUserOwnerOfRoom(userData, code)) return 2
+
 		await this.RoomModel.updateOne({ code }, { $pull: { participants: { id: userData.id } } })
 		await this.UserModel.updateOne({ id: userData.id }, { $pull: { rooms: { code: code } } })
-		return 2
+
+		// Room will be deleted if it has not at least one participant
+		const room = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
+		if (room.participants.length === 0) await this.deleteRoom(room.owner, code)
+
+		return 3
 	}
 
 	async addWishlist(
@@ -139,17 +154,23 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		return await this.UserModel.updateOne({ id: user.id }, { $push: { rooms: room } })
 	}
 
-	async deleteRoom(code: string): Promise<null> {
-		const participantsOfRoom = ((await this.RoomModel.findOne({ code })) as mongoose.Document &
-			Room).participants
+	async deleteRoom(user: User, code: string): Promise<0 | 1 | 2> {
+		const room = (await this.RoomModel.findOne({ code })) as mongoose.Document & Room
+		if (!room) return 0
+		if (!(await this.isUserOwnerOfRoom(user, code))) return 1
 
-		participantsOfRoom.map(async ({ id }) => {
+		room.participants.map(async ({ id }) => {
 			// removes room from users' "rooms" field
 			await this.UserModel.updateOne({ id: id }, { $pull: { rooms: { code: code } } })
 		})
 
 		await this.RoomModel.deleteOne({ code })
 
-		return null
+		return 2
+	}
+
+	async isUserOwnerOfRoom(user: User, code: string): Promise<Boolean> {
+		const roomFound = (await this.RoomModel.findOne({ code })) as Room & mongoose.Document
+		return roomFound.owner.id === user.id
 	}
 }
