@@ -20,7 +20,7 @@ export default function roomCreatedHandler(clientInfo: ClientInfo, room: Room): 
 				action: {
 					type: 'text',
 					label: 'Начать!',
-					payload: JSON.stringify({ command: 'startRoom' }),
+					payload: JSON.stringify({ command: 'startRoom:' + room.code }),
 				},
 			}),
 		]).inline(),
