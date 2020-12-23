@@ -7,16 +7,17 @@ import RequestHelpers from '../helpers/requestHandlers/requestHandlers'
 import DatabaseAdapter from '../helpers/DatabaseAdapter/DatabaseAdapter'
 import GetUserVK from '../helpers/getUserVK/getUserVK'
 import CreateRoomScene from '../helpers/scenes/createRoomScene'
+import LeaveRoomScene from '../helpers/scenes/leaveRoomScene'
 
 const bot = new VKBot(process.env.TOKEN as string),
 	databaseAdapter = new DatabaseAdapter(process.env.DATABASE_URL as string),
 	requestHandlers = new RequestHelpers(),
 	getUserVK = GetUserVK(bot),
 	session = new Session(),
-	createRoomStage = new Stage(CreateRoomScene)
+	scenes = new Stage(CreateRoomScene, LeaveRoomScene)
 
 bot.use(session.middleware())
-bot.use(createRoomStage.middleware())
+bot.use(scenes.middleware())
 
 bot.on(async (ctx: any) => {
 	const { payload, text } = ctx.message
@@ -31,6 +32,11 @@ bot.on(async (ctx: any) => {
 	if (payload === '{"command":"createRoom"}') {
 		ctx.session.userData = user
 		ctx.scene.enter('createRoom')
+	}
+
+	if (payload === '{"command":"leaveRoom"}') {
+		ctx.session.userData = user
+		ctx.scene.enter('leaveRoom')
 	}
 })
 
