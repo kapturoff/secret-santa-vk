@@ -42,7 +42,7 @@ export default new Scene(
 	async (ctx: any) => {
 		const text = (ctx.message.text as string).toLowerCase()
 		
-		if (text === 'пропустить' || text === "вернуться назад")  {
+		if (text === 'пропустить' || text === "вернуться назад" || text === "начать!")  {
 			const { text, buttons } = requestHandlers.wishlistAdded(false)
 			ctx.scene.leave()
 			ctx.reply(text, null, buttons)
