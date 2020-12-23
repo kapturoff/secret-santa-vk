@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import DatabaseAdapter, { IDatabaseAdapter } from '../src/helpers/DatabaseAdapter/DatabaseAdapter'
 import { User, Room } from '../src/interfaces'
+import { Document } from 'mongoose'
 
 const userData1: User = {
 		first_name: 'John',
@@ -16,6 +17,20 @@ const userData1: User = {
 		id: 2354356534,
 		sex: 1,
 		rooms: [],
+	},
+	userData3: User = {
+		first_name: 'Alexandra',
+		last_name: 'Bob',
+		id: 23543234285,
+		sex: 0,
+		rooms: [],
+	},
+	userData4: User = {
+		first_name: 'Cheema',
+		last_name: 'Meema',
+		id: 23882992944,
+		sex: 2,
+		rooms: [],
 	}
 
 let databaseAdapter: IDatabaseAdapter
@@ -28,7 +43,6 @@ describe('DatabaseAdapter Class Test', async () => {
 			done()
 		})
 	})
-
 
 	describe('saveUser() Function Test', () => {
 		it('user can be saved', async () => {
@@ -109,7 +123,7 @@ describe('DatabaseAdapter Class Test', async () => {
 
 			expect(userLeavedRoom).to.be.equal(3)
 		})
-		
+
 		it('user can not leave the room if he is not in it', async () => {
 			const userLeavedRoom = await databaseAdapter.deleteUserFromRoom(userData2, '02x1234j')
 
@@ -135,7 +149,10 @@ describe('DatabaseAdapter Class Test', async () => {
 
 	describe('deleteRoom() Function Test', () => {
 		it('user can not delete room that does not exist', async () => {
-			const roomDeleted = await databaseAdapter.deleteRoom(userData1, 'code that does not exist')
+			const roomDeleted = await databaseAdapter.deleteRoom(
+				userData1,
+				'code that does not exist'
+			)
 			expect(roomDeleted).to.be.equal(0)
 		})
 
@@ -158,6 +175,66 @@ describe('DatabaseAdapter Class Test', async () => {
 			expect((user as User).rooms).to.not.satisfy((array: Room[]) =>
 				array.some((room: Room) => room.code === '02x1234j')
 			)
+		})
+	})
+
+	describe('startGame() Function Test', async () => {
+		it('game can not be started in room that does not exist', async () => {
+			const roomCreated = (await databaseAdapter.createRoom(
+				'Test',
+				'88888888',
+				userData1
+			)) as Document & Room
+			await databaseAdapter.addUserToRoom(userData2, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData3, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData4, roomCreated.code)
+
+			const gameStarted = await databaseAdapter.startGame(userData1, 'code that does not exist')
+			expect(gameStarted.status).to.be.equal(0)
+		})
+
+		it('game can not be started by not an owner', async () => {
+			const roomCreated = (await databaseAdapter.createRoom(
+				'Test',
+				'1234',
+				userData1
+			)) as Document & Room
+			await databaseAdapter.addUserToRoom(userData2, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData3, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData4, roomCreated.code)
+
+			const gameStarted = await databaseAdapter.startGame(userData2, '1234')
+			expect(gameStarted.status).to.be.equal(1)
+		})
+
+		it('game can not be started if count of participants less than 4', async () => {
+			const roomCreated = (await databaseAdapter.createRoom(
+				'Test',
+				'191919',
+				userData1
+			)) as Document & Room
+			await databaseAdapter.addUserToRoom(userData2, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData3, roomCreated.code)
+
+			const gameStarted = await databaseAdapter.startGame(userData1, '191919')
+			expect(gameStarted.status).to.be.equal(2)
+		})
+
+		it('room will be deleted after game started', async () => {
+			const roomCreated = (await databaseAdapter.createRoom(
+				'Test',
+				'010101',
+				userData1
+			)) as Document & Room
+			await databaseAdapter.addUserToRoom(userData2, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData3, roomCreated.code)
+			await databaseAdapter.addUserToRoom(userData4, roomCreated.code)
+
+			const gameStarted = await databaseAdapter.startGame(userData1, '010101')
+			const room = await databaseAdapter.getRoom('010101')
+
+			expect(gameStarted.status).to.be.equal(3)
+			expect(room).to.be.null
 		})
 	})
 

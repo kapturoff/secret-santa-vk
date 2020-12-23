@@ -1,8 +1,9 @@
 import mongoose from 'mongoose'
-import { Participant, Room, User } from 'interfaces'
+import { Participant, Room, User, Pair } from 'interfaces'
 import { RoomSchema } from '../mongooseSchemas/Room'
 import { ParticipantSchema } from '../mongooseSchemas/Participant'
 import { UserSchema } from '../mongooseSchemas/User'
+import makeRandomPairs from '../makeRandomPairs/makeRandomPairs'
 
 export interface IDatabaseAdapter {
 	_convertUserIntoParticipant(user: User): Participant
@@ -35,6 +36,14 @@ export interface IDatabaseAdapter {
 	getRoom(code: string): Promise<mongoose.Document | null>
 	getUser(id: number): Promise<mongoose.Document | null>
 	isUserOwnerOfRoom(user: User, code: string): Promise<Boolean>
+	/**
+	 * Returns in status:
+	 * - 0 - if room was not found
+	 * - 1 - if user is not owner of room
+	 * - 2 - if count of the participants less than 4
+	 * - 3 - if game was started
+	 */
+	startGame(user: User, code: string): Promise<{ status: 0 | 1 | 2 | 3; pairs: Pair[] }>
 	connection: mongoose.Connection
 }
 
@@ -63,6 +72,16 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 			sex: user.sex,
 			wishlist: '',
 		} as Participant
+	}
+
+	async startGame(user: User, code: string): Promise<{ status: 0 | 1 | 2 | 3; pairs: Pair[] }> {
+		const room = ((await this.getRoom(code)) as unknown) as mongoose.Document & Room
+		if (!room) return { status: 0, pairs: [] }
+		if (room.owner.id !== user.id) return { status: 1, pairs: [] }
+		if (room.participants.length < 4) return { status: 2, pairs: [] }
+
+		await this.deleteRoom(user, code)
+		return { status: 3, pairs: makeRandomPairs(room.participants) }
 	}
 
 	async createRoom(name: string, code: string, ownerData: User): Promise<mongoose.Document> {
