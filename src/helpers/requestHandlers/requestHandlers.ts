@@ -8,7 +8,7 @@ import roomJoined from './roomJoined'
 import roomLeaveFailure from './roomLeaveFailure'
 import roomNewParticipant from './roomNewParticipant'
 import roomNotEnoughParticipants from './roomNotEnoughParticipants'
-import roomNotJoined from './roomNotJoined'
+import roomNotFound from './roomNotFound'
 import userLeavedRoom from './userLeavedRoom'
 import userLeavingRoom from './userLeavingRoom'
 import wishlistAdded from './wishlistAdded'
@@ -24,7 +24,7 @@ interface RequestHandlers {
 	roomLeaveFailure: typeof roomLeaveFailure
 	roomNewParticipant: typeof roomNewParticipant
 	roomNotEnoughParticipants: typeof roomNotEnoughParticipants
-	roomNotJoined: typeof roomNotJoined
+	roomNotFound: typeof roomNotFound
 	userLeavedRoom: typeof userLeavedRoom
 	userLeavingRoom: typeof userLeavingRoom
 	wishlistAdded: typeof wishlistAdded
@@ -42,7 +42,7 @@ Object.assign(RequestHandlers.prototype, {
 	roomLeaveFailure,
 	roomNewParticipant,
 	roomNotEnoughParticipants,
-	roomNotJoined,
+	roomNotFound,
 	userLeavedRoom,
 	userLeavingRoom,
 	wishlistAdded,
