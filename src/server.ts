@@ -11,4 +11,6 @@ router.post('/', bot.webhookCallback)
 app.use(bodyParser())
 app.use(router.routes())
 
-app.listen(process.env.PORT)
+app.listen(process.env.PORT, 'localhost', () => {
+	console.log("i'm alive")
+})

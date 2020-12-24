@@ -13,7 +13,10 @@ import LeaveRoomScene from '../helpers/scenes/leaveRoomScene'
 import JoinRoomScene from '../helpers/scenes/joinRoomScene'
 import DeleteRoomScene from '../helpers/scenes/deleteRoomScene'
 
-const bot = new VKBot(process.env.TOKEN as string),
+const bot = new VKBot({
+		token: process.env.TOKEN as string,
+		confirmation: process.env.CONFIRMATION as string,
+	}),
 	databaseAdapter = new DatabaseAdapter(process.env.DATABASE_URL as string),
 	requestHandlers = new RequestHelpers(),
 	getUserVK = GetUserVK(bot),
@@ -41,7 +44,7 @@ bot.use(async (ctx: any, next: () => void) => {
 	try {
 		await next()
 	} catch (e) {
-		logger.error(`Error`, {usr_id: ctx.message.id, ...e})
+		logger.error(`Error`, { usr_id: ctx.message.id, ...e })
 		const { text, buttons } = requestHandlers.error()
 		ctx.reply(text, null, buttons)
 	}
@@ -111,11 +114,6 @@ bot.on(async (ctx: any) => {
 		const { text, buttons } = requestHandlers.unknownCommand()
 		ctx.reply(text, null, buttons)
 	}
-})
-
-bot.startPolling((err: any) => {
-	if (err) logger.http('HttpError', err)
-	console.log(`I'm alive!`)
 })
 
 export default bot
