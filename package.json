@@ -11,8 +11,12 @@
 	"author": "scefee",
 	"license": "ISC",
 	"dependencies": {
+		"@koa/router": "^10.0.0",
+		"koa": "^2.13.0",
+		"koa-bodyparser": "^4.3.0",
 		"mongoose": "^5.11.4",
-		"node-vk-bot-api": "^3.3.7"
+		"node-vk-bot-api": "^3.3.7",
+		"winston": "^3.3.3"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.14",

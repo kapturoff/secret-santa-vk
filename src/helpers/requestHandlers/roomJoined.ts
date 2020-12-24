@@ -3,7 +3,7 @@ import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomJoinedHandler(room: Room): MessageResponse {
 	return {
-		text: `Отлично, я добавил тебя в комнату "${room.name}" (#${room.code})!
+		text: `Отлично, я добавил тебя в комнату "${room.name}" (${room.code})!
 
 В следующем сообщении ты можешь отправить список своих пожеланий для подарков. 
 

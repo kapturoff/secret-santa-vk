@@ -60,10 +60,10 @@ export default new Scene(
 
 		ctx.scene.next()
 	},
-	async (ctx: any) => async (ctx: any) => {
+	async (ctx: any) => {
 		const text = (ctx.message.text as string).toLowerCase()
-
-		if (text === 'пропустить' || text === 'вернуться назад') {
+		
+		if (text === 'пропустить' || text === "вернуться назад" || text === "начать!")  {
 			const { text, buttons } = requestHandlers.wishlistAdded(false)
 			ctx.scene.leave()
 			ctx.reply(text, null, buttons)
@@ -72,9 +72,9 @@ export default new Scene(
 				ctx.session.userData,
 				ctx.session.roomCode,
 				ctx.message.text
-			)
-
-			const { text, buttons } = requestHandlers.wishlistAdded(true)
+            )
+            
+            const { text, buttons } = requestHandlers.wishlistAdded(true)
 			ctx.scene.leave()
 			ctx.reply(text, null, buttons)
 		}

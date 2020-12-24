@@ -80,8 +80,9 @@ export default class DatabaseAdapter implements IDatabaseAdapter {
 		if (room.owner.id !== user.id) return { status: 1, pairs: [] }
 		if (room.participants.length < 4) return { status: 2, pairs: [] }
 
+		const pairs = makeRandomPairs(room.participants)
 		await this.deleteRoom(user, code)
-		return { status: 3, pairs: makeRandomPairs(room.participants) }
+		return { status: 3, pairs }
 	}
 
 	async createRoom(name: string, code: string, ownerData: User): Promise<mongoose.Document> {
