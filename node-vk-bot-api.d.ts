@@ -1,2 +1,5 @@
 declare module 'node-vk-bot-api/*'
 declare module 'node-vk-bot-api'
+declare module 'koa'
+declare module '@koa/router'
+declare module 'koa-bodyparser'
