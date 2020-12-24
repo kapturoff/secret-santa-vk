@@ -5,9 +5,10 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "npm run build && node dist/server.js",
-		"test": "ts-mocha 'tests/*.ts'",
-		"build": "rm -rf dist/* && tsc",
-		"test-seperate": "ts-mocha"
+		"test": "npx ts-mocha 'tests/*.ts'",
+		"build": "rm -rf dist/* && npx tsc",
+		"tsc": "npx tsc",
+		"test-seperate": "npx ts-mocha"
 	},
 	"author": "scefee",
 	"license": "ISC",
