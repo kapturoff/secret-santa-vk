@@ -28,7 +28,7 @@ const bot = new VKBot(process.env.TOKEN as string),
 		},
 		transports: [
 			new winston.transports.File({
-				filename: '../bot-service.log',
+				filename: './bot-service.log',
 				level: 'info',
 			}),
 		],
@@ -41,7 +41,7 @@ bot.use(async (ctx: any, next: () => void) => {
 	try {
 		await next()
 	} catch (e) {
-		logger.log('error', `id${ctx.message.id} | ${JSON.stringify(e)}`)
+		logger.error(`Error`, {usr_id: ctx.message.id, ...e})
 		const { text, buttons } = requestHandlers.error()
 		ctx.reply(text, null, buttons)
 	}
@@ -96,9 +96,7 @@ bot.on(async (ctx: any) => {
 					const { text, buttons } = requestHandlers.roomGameStarted(pair.recipient, room)
 
 					queue.addToQueue(() => {
-						bot.sendMessage(pair.santa.id, text, null, buttons).catch((e: any) => {
-							logger.log('info', `id${pair.santa.id} | ${JSON.stringify(e)}`)
-						})
+						bot.sendMessage(pair.santa.id, text, null, buttons).catch((e: any) => null)
 					})
 				})
 			} else {
@@ -116,7 +114,7 @@ bot.on(async (ctx: any) => {
 })
 
 bot.startPolling((err: any) => {
-	if (err) logger.log('http', JSON.stringify(err))
+	if (err) logger.http('HttpError', err)
 	console.log(`I'm alive!`)
 })
 

@@ -3,8 +3,8 @@ import Markup from 'node-vk-bot-api/lib/markup'
 
 export default function roomJoinedHandler(): MessageResponse {
 	return {
-		text: `Прости, но удалить комнату может только её создатель`,
-		buttons: [
+		text: `Прости, но удалить и начать игру в комнате может только её создатель`,
+		buttons: Markup.keyboard([
 			Markup.button({
 				color: 'secondary',
 				action: {
@@ -13,6 +13,6 @@ export default function roomJoinedHandler(): MessageResponse {
 					payload: JSON.stringify({ command: 'start' }),
 				},
 			}),
-		],
+		])
 	}
 }
