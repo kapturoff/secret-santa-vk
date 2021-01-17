@@ -1,16 +1,13 @@
-import Koa from 'koa'
-import Router from '@koa/router'
-import bodyParser from 'koa-bodyparser'
+import express from 'express'
+import bodyParser from 'body-parser'
 import bot from './bot/bot'
 
-const app = new Koa()
-const router = new Router()
+const app = express(),
+	PORT = process.env.PORT as unknown
 
-router.post('/', bot.webhookCallback)
+app.use(bodyParser.json())
+app.post('/', bot.webhookCallback)
 
-app.use(bodyParser())
-app.use(router.routes())
-
-app.listen(process.env.PORT, 'localhost', () => {
-	console.log("i'm alive")
+app.listen(PORT as number, () => {
+	console.log(`⚡️[server]: Server is running at ${PORT as number} port`)
 })
